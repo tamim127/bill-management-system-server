@@ -85,7 +85,16 @@ async function run() {
             }
         });
 
-       
+        app.delete("/my-bills/:id", async (req, res) => {
+            const { id } = req.params;
+            const result = await myBillsCollection.deleteOne({ _id: new ObjectId(id) });
+            if (result.deletedCount > 0) {
+                res.json({ success: true, message: "Bill deleted successfully" });
+            } else {
+                res.json({ success: false, message: "Bill not found" });
+            }
+        });
+
 
       
         
