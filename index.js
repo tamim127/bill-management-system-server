@@ -54,7 +54,16 @@ async function run() {
             res.send(bills);
         });
 
-       
+        app.post("/myBills", async (req, res) => {
+            const { billId, username, phone, address, email, amount, date } = req.body;
+            if (!billId || !username || !phone || !address || !email || !amount || !date) {
+                return res.status(400).json({ message: "All fields are required" });
+            }
+            const billData = { billId, username, phone, address, email, amount, date, createdAt: new Date() };
+            const result = await myBillsCollection.insertOne(billData);
+            res.json({ success: true, insertedId: result.insertedId });
+        });
+
        
       
         
