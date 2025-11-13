@@ -64,7 +64,14 @@ async function run() {
             res.json({ success: true, insertedId: result.insertedId });
         });
 
-       
+        app.get("/my-bills", async (req, res) => {
+            const { email } = req.query;
+            if (!email) return res.status(400).json({ message: "Email is required" });
+            const userBills = await myBillsCollection.find({ email }).sort({ createdAt: -1 }).toArray();
+            res.send(userBills);
+        });
+
+        
       
         
         app.listen(port, () => {
