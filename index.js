@@ -30,6 +30,17 @@ async function run() {
             res.send("Bill Management Server is Running...");
         });
 
+        app.get("/bills", async (req, res) => {
+            const { category } = req.query;
+            let query = {};
+            if (category && category !== "All") {
+                query.category = { $regex: new RegExp(`^${category}$`, "i") };
+            }
+            const bills = await billsCollection.find(query).toArray();
+            res.send(bills);
+        });
+
+       
       
         
         app.listen(port, () => {
