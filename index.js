@@ -71,7 +71,22 @@ async function run() {
             res.send(userBills);
         });
 
-        
+        app.put("/my-bills/:id", async (req, res) => {
+            const { id } = req.params;
+            const updatedData = req.body;
+            const result = await myBillsCollection.updateOne(
+                { _id: new ObjectId(id) },
+                { $set: updatedData }
+            );
+            if (result.modifiedCount > 0) {
+                res.json({ success: true, message: "Bill updated successfully" });
+            } else {
+                res.json({ success: false, message: "No changes made" });
+            }
+        });
+
+       
+
       
         
         app.listen(port, () => {
