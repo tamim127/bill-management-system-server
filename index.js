@@ -41,6 +41,16 @@ async function run() {
         });
 
        
+
+        app.get("/bills/:id", async (req, res) => {
+            const id = req.params.id;
+            const bill = await billsCollection.findOne({ _id: new ObjectId(id) });
+            if (!bill) return res.status(404).json({ message: "Bill not found" });
+            res.send(bill);
+        });
+
+        
+       
       
         
         app.listen(port, () => {
