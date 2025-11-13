@@ -49,7 +49,12 @@ async function run() {
             res.send(bill);
         });
 
-        
+        app.get("/recent-bills", async (req, res) => {
+            const bills = await billsCollection.find().sort({ date: -1 }).limit(6).toArray();
+            res.send(bills);
+        });
+
+       
        
       
         
