@@ -95,6 +95,24 @@ async function run() {
             }
         });
 
+        app.get("/my-bills/download", async (req, res) => {
+            const { email } = req.query;
+            if (!email) return res.status(400).json({ message: "Email is required" });
+
+            const bills = await myBillsCollection.find({ email }).sort({ createdAt: -1 }).toArray();
+            const doc = new pdfkit();
+            res.setHeader("Content-Type", "application/pdf");
+            res.setHeader("Content-Disposition", `attachment; filename=${email}-bills.pdf`);
+            doc.pipe(res);
+            doc.fontSize(18).text(`Billing Report for ${email}`, { underline: true });
+            doc.moveDown();
+            bills.forEach((bill, idx) => {
+                doc.fontSize(12).text(`${idx + 1}. ${bill.username} - ${bill.amount} - ${bill.date}`);
+            });
+            doc.end();
+        });
+
+
 
       
         
